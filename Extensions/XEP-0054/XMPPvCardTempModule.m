@@ -27,7 +27,7 @@
 @interface XMPPvCardTempModule()
 
 - (void)_updatevCardTemp:(XMPPvCardTemp *)vCardTemp forJID:(XMPPJID *)jid;
-- (void)_fetchvCardTempForJID:(XMPPJID *)jid;
+- (void)_fetchvCardTempForJID:(XMPPJID *)jid bare:(BOOL)bare;
 
 @end
 
@@ -126,6 +126,11 @@
 }
 
 - (void)fetchvCardTempForJID:(XMPPJID *)jid ignoreStorage:(BOOL)ignoreStorage
+{
+    return [self fetchvCardTempForJID:jid ignoreStorage:ignoreStorage bare:NO];
+}
+
+- (void)fetchvCardTempForJID:(XMPPJID *)jid ignoreStorage:(BOOL)ignoreStorage bare:(BOOL)bare
 {	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
@@ -139,7 +144,7 @@
 		
 		if (vCardTemp == nil && [_xmppvCardTempModuleStorage shouldFetchvCardTempForJID:jid xmppStream:xmppStream])
 		{
-			[self _fetchvCardTempForJID:jid];
+			[self _fetchvCardTempForJID:jid bare:bare];
 		}
 		
 	}};
@@ -150,17 +155,22 @@
 		dispatch_async(moduleQueue, block);
 }
 
-- (XMPPvCardTemp *)vCardTempForJID:(XMPPJID *)jid shouldFetch:(BOOL)shouldFetch{
-    
+- (XMPPvCardTemp *)vCardTempForJID:(XMPPJID *)jid shouldFetch:(BOOL)shouldFetch
+{
+    return [self vCardTempForJID:jid shouldFetch:shouldFetch bare:NO];
+}
+
+- (XMPPvCardTemp *)vCardTempForJID:(XMPPJID *)jid shouldFetch:(BOOL)shouldFetch bare:(BOOL)bare
+{
     __block XMPPvCardTemp *result;
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		XMPPvCardTemp *vCardTemp = [_xmppvCardTempModuleStorage vCardTempForJID:jid xmppStream:xmppStream];
+        XMPPvCardTemp *vCardTemp = [_xmppvCardTempModuleStorage vCardTempForJID:jid xmppStream:xmppStream];
 		
 		if (vCardTemp == nil && shouldFetch && [_xmppvCardTempModuleStorage shouldFetchvCardTempForJID:jid xmppStream:xmppStream])
 		{
-			[self _fetchvCardTempForJID:jid];
+			[self _fetchvCardTempForJID:jid bare:bare];
 		}
 		
 		result = vCardTemp;
@@ -231,10 +241,13 @@
 		dispatch_async(moduleQueue, block);
 }
 
-- (void)_fetchvCardTempForJID:(XMPPJID *)jid{
+- (void)_fetchvCardTempForJID:(XMPPJID *)jid bare:(BOOL)bare {
     if(!jid) return;
-
-    [xmppStream sendElement:[XMPPvCardTemp iqvCardRequestForJID:jid]];
+    if (bare) {
+        [xmppStream sendElement:[XMPPvCardTemp iqvCardRequestForJID:jid]];
+    } else {
+        [xmppStream sendElement:[XMPPvCardTemp iqvCardRequestForFullJID:jid]];
+    }
 }
 
 - (void)handleMyvcard:(XMPPIQ *)iq withInfo:(XMPPBasicTrackingInfo *)trackerInfo{

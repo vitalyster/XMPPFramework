@@ -37,15 +37,29 @@
 - (void)fetchvCardTempForJID:(XMPPJID *)jid;
 
 /**
+ * Fetches the vCardTemp for the given JID, optionally with resource
+ **/
+- (void)fetchvCardTempForJID:(XMPPJID *)jid bare:(BOOL)bare;
+
+/**
  * Fetches the vCardTemp for the given JID, optionally ignoring the storage
 **/
 - (void)fetchvCardTempForJID:(XMPPJID *)jid ignoreStorage:(BOOL)ignoreStorage;
+
+/**
+ * Fetches the vCardTemp for the given JID, optionally ignoring the storage, optionally with resource
+ **/
+- (void)fetchvCardTempForJID:(XMPPJID *)jid ignoreStorage:(BOOL)ignoreStorage bare:(BOOL)bare;
 
 /**
  * Returns the vCardTemp for the given JID, this is the equivalent of calling the vCardTempForJID:xmppStream: on the moduleStorage
  * If there is no vCardTemp in the storage for the given jid and shouldFetch is YES, it will automatically fetch it from the network
 **/
 - (XMPPvCardTemp *)vCardTempForJID:(XMPPJID *)jid shouldFetch:(BOOL)shouldFetch;
+/**
+ * Same as above, but with or without resource
+**/
+- (XMPPvCardTemp *)vCardTempForJID:(XMPPJID *)jid shouldFetch:(BOOL)shouldFetch bare:(BOOL)bare;
 
 /**
  * Updates myvCard in storage and sends it to the server

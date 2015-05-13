@@ -119,8 +119,11 @@ NSString *const kXMPPvCardAvatarPhotoElement = @"photo";
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Public
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (NSData *)photoDataForJID:(XMPPJID *)jid 
+- (NSData *)photoDataForJID:(XMPPJID *)jid
+{
+    return [self photoDataForJID:jid bare:NO];
+}
+- (NSData *)photoDataForJID:(XMPPJID *)jid bare:(BOOL)bare
 {
 	// This is a public method, so it may be invoked on any thread/queue.
 	// 
@@ -136,7 +139,7 @@ NSString *const kXMPPvCardAvatarPhotoElement = @"photo";
 		
 		if (photoData == nil) 
 		{
-			[_xmppvCardTempModule vCardTempForJID:jid shouldFetch:YES];
+			[_xmppvCardTempModule vCardTempForJID:jid shouldFetch:YES bare:bare];
 		}
 		
 	}};

@@ -95,6 +95,14 @@ NSString *const kXMPPvCardTempElement = @"vCard";
   return iq;
 }
 
++ (XMPPIQ *)iqvCardRequestForFullJID:(XMPPJID *)jid {
+    XMPPIQ *iq = [XMPPIQ iqWithType:@"get" to:jid elementID:[XMPPStream generateUUID]];
+    NSXMLElement *vCardElem = [NSXMLElement elementWithName:kXMPPvCardTempElement xmlns:kXMPPNSvCardTemp];
+    
+    [iq addChild:vCardElem];
+    return iq;
+}
+
 
 #pragma mark -
 #pragma mark Identification Types
