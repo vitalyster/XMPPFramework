@@ -18,7 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 @class XMPPModule;
 @class XMPPElement;
 @class XMPPElementReceipt;
+@class XMPPFeature;
+
 @protocol XMPPStreamDelegate;
+@protocol XMPPElementHandler;
+@protocol XMPPStreamPreprocessor;
 
 #if TARGET_OS_IPHONE
   #define MIN_KEEPALIVE_INTERVAL      20.0 // 20 Seconds
@@ -732,6 +736,16 @@ extern const NSTimeInterval XMPPStreamTimeoutNone;
  * idx is in relation to all modules not just those of the given class.
 **/
 - (void)enumerateModulesOfClass:(Class)aClass withBlock:(void (^)(XMPPModule *module, NSUInteger idx, BOOL *stop))block;
+
+/**
+ * added feature support
+ **/
+- (void)addFeature:(XMPPFeature *)feature;
+- (void)removeFeature:(XMPPFeature *)feature;
+- (void)addStreamPreprocessor:(id<XMPPStreamPreprocessor>)preprocessor;
+- (void)removeStreamPreprocessor:(id<XMPPStreamPreprocessor>)preprocessor;
+- (void)addElementHandler:(id<XMPPElementHandler>)handler;
+- (void)removeElementHandler:(id<XMPPElementHandler>)handler;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Utilities

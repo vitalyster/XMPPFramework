@@ -38,6 +38,19 @@ NS_ASSUME_NONNULL_BEGIN
 **/
 extern NSString *const XMPPStreamDidChangeMyJIDNotification;
 
+// Define the timeouts (in seconds) for retreiving various parts of the XML stream
+#define TIMEOUT_XMPP_WRITE         -1
+#define TIMEOUT_XMPP_READ_START    10
+#define TIMEOUT_XMPP_READ_STREAM   -1
+
+// Define the tags we'll use to differentiate what it is we're currently reading or writing
+#define TAG_XMPP_READ_START         100
+#define TAG_XMPP_READ_STREAM        101
+#define TAG_XMPP_WRITE_START        200
+#define TAG_XMPP_WRITE_STOP         201
+#define TAG_XMPP_WRITE_STREAM       202
+#define TAG_XMPP_WRITE_RECEIPT      203
+
 @interface XMPPStream (/* Internal */) <XMPPParserDelegate>
 
 /**
@@ -113,6 +126,12 @@ extern NSString *const XMPPStreamDidChangeMyJIDNotification;
 **/
 - (void)registerCustomElementNames:(NSSet<NSString*> *)names;
 - (void)unregisterCustomElementNames:(NSSet<NSString*> *)names;
+
+// A Wrapper, prepared for stream compression
+- (void)writeData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag;
+- (void)readDataWithTimeout:(NSTimeInterval)timeout tag:(long)tag;
+
+- (void)sendOpeningNegotiation;
 
 @end
 

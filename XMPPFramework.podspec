@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.default_subspec = 'default'
 
   s.subspec 'default' do |ss|
-	  ss.source_files = ['Core/**/*.{h,m}',
+	  ss.source_files = ['Core/**/*.{h,m}', 'Features/**/*.{h,m}',
 	                    'Authentication/**/*.{h,m}', 'Categories/**/*.{h,m}',
 	                    'Utilities/**/*.{h,m}', 'Extensions/**/*.{h,m}']
 	  ss.ios.exclude_files = 'Extensions/SystemInputActivityMonitor/**/*.{h,m}'
