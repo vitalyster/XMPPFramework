@@ -3548,7 +3548,7 @@ enum XMPPStreamConfig
     // out of XMPStream as a separated Feature (module), we can use the sequence
     // of the array items to control the order.
 
-    NSXMLElement *f_need_auth = [features elementForName:@"auth" xmlns:@"http://jabber.org/features/iq-auth"];
+    NSXMLElement *f_need_auth = [features elementForName:@"mechanisms" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
     if (!f_need_auth) { // we must ensure authentication come first
         for (XMPPFeature * feature in registeredFeatures) {
             if ([feature handleFeatures:features]) {
